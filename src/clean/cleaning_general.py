@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from src.clean.cleaning_general import clean_data
 
 def convert_to_binary(value):
     """
