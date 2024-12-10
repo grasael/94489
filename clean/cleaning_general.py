@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 def convert_to_binary(value):
@@ -16,6 +17,11 @@ def clean_general_data(projects_file, outcomes_file, essays_file, output_file):
     - essays_file: Path to the essays dataset CSV.
     - output_file: Path to save the cleaned dataset CSV.
     """
+    # Check if files exist
+    for file in [projects_file, outcomes_file, essays_file]:
+        if not os.path.exists(file):
+            raise FileNotFoundError(f"Required file not found: {file}. Please download it to the appropriate location.")
+
     # Load datasets
     projects = pd.read_csv(projects_file)
     outcomes = pd.read_csv(outcomes_file)
@@ -60,8 +66,6 @@ def clean_general_data(projects_file, outcomes_file, essays_file, output_file):
 
     data["important"] = data.apply(important_project, axis=1)
     data_imp = data[data["important"] == "yes"].drop(columns=["important", "primary_focus_subject", "poverty_level"])
-
-    data_imp["need_statement"] = data_imp["need_statement"].str.replace('\r', '')
 
     # Save cleaned data
     data_imp.to_csv(output_file, index=False)
